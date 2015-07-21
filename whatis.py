@@ -43,9 +43,8 @@ def show_definition(thing=None):
     #if not session.get("logged_in"):
     #    abort(401)
     cur = get_db().execute("select * from entries where key = ?", [thing])
-    entry = format_entries(cur.fetchall())
-    print(entry)
-    return ""
+    entries = format_entries(cur.fetchall())
+    return render_template("definitions.html", entries=entries, thing=thing)
 
 @app.route("/define/<thing>/<what>")
 def define(thing=None, what=None):

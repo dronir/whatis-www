@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block header %}
+<h1>What is {{thing}}? </h1>
+{% endblock %}
+
+{% block body %}
+  <ul class="definitions">
+  {% for entry in entries %}
+    <li><strong>{{entry.definition}}</strong> ({{entry.definer}} at {{entry.timestamp}}) </li>
+  {% else %}
+    <li><strong>No definitions.</strong></li>
+  {% endfor %}
+  </ul>
+{% endblock %}
