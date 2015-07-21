@@ -1,15 +1,25 @@
 <!doctype html>
-<title>Flaskr</title>
+<html>
+<head>
+<title>What is this</title>
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
 <div class="page">
-  {% block header %}
-  <h1>Whatis web interface</h2>
-  {% endblock %}
-  <div class="metanav">
-
-  </div>
+  
   {% for message in get_flashed_messages() %}
     <div class="flash">{{ message }}</div>
   {% endfor %}
-  {% block body %}{% endblock %}
+  
+  {% block header %}
+  <h1>Whatis web interface</h2>
+  {% endblock %}
+  
+  <div class="metanav"></div>
+  
+  <div class="content">
+    {% block body %}{% endblock %}
+  </div>
 </div>
+</body>
+</html>

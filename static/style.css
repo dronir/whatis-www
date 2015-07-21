@@ -1,0 +1,20 @@
+
+h1 {
+    font-family: sans-serif;
+}
+
+span.definition {
+    color: red;
+}
+
+span.definer {
+    font-size: small;
+}
+
+li {
+    list-style: none;
+}
+
+body {
+    margin-left: 5cm;
+}

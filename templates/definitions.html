@@ -7,7 +7,10 @@
 {% block body %}
   <ul class="definitions">
   {% for entry in entries %}
-    <li><strong>{{entry.definition}}</strong> ({{entry.definer}} at {{entry.timestamp}}) </li>
+    <li>
+      <span class="definition">{{entry.definition}}</span> 
+      <span class="definer">({{entry.definer}} at {{entry.timestamp}})</span>
+    </li>
   {% else %}
     <li><strong>No definitions.</strong></li>
   {% endfor %}
