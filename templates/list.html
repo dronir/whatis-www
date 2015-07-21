@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block header %}
+<h1>List of '{{letter}}' </h1>
+{% endblock %}
+
+{% block body %}
+  <ul class="keys">
+  {% for key in items %}
+    <li>
+      <a class="key" href="/whatis/{{key}}"> {{key}} </a>
+    </li>
+  {% else %}
+    <li><strong>No definitions.</strong></li>
+  {% endfor %}
+  </ul>
+{% endblock %}

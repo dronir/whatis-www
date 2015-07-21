@@ -9,16 +9,22 @@ from contextlib import closing
 app = Flask(__name__)
 app.config.from_object("config")
 
+
+# Database handling functions
+
 def connect_db():
+    """Connect to the database and return handle."""
     return sqlite3.connect(app.config['DATABASE'])
 
 def get_db():
+    """Return the handle to the database, connecting if necessary."""
     db = getattr(g, '_database', None)
     if db is None:
         db = g._database = connect_db()
     return db
 
 def init_db():
+    """Initialize an empty database (handle with care!)."""
     with closing(connect_db()) as db:
         with app.open_resource('schema.sql', mode='r') as f:
             db.cursor().executescript(f.read())
@@ -31,6 +37,8 @@ def teardown_request(exception):
         db.close()
 
 
+# Definition handling functions
+
 def format_entries(fetch):
     return [{"key" : row[1],
             "definition" : row[2],
@@ -40,22 +48,70 @@ def format_entries(fetch):
 
 @app.route("/whatis/<thing>")
 def show_definition(thing=None):
-    #if not session.get("logged_in"):
-    #    abort(401)
-    cur = get_db().execute("select * from entries where key = ?", [thing])
-    entries = format_entries(cur.fetchall())
+    if not session.get("logged_in"):
+        return redirect(url_for("login"))
+    cursor = get_db().execute("select * from entries where key = ?", [thing])
+    entries = format_entries(cursor.fetchall())
     return render_template("definitions.html", entries=entries, thing=thing)
+
 
 @app.route("/define/<thing>/<what>")
 def define(thing=None, what=None):
+    if not session.get("logged_in"):
+        return redirect(url_for("login"))
     if not thing and what:
         return ""
     get_db().execute("insert into entries (key, definition, definer) values (?, ?, ?)",
         [thing, what, "dronir"])
     get_db().commit()
-    flash("Defined {} as {}".format(thing, what))
+    flash("Defined {} as '{}'.".format(thing, what))
     return ""
+
+
+@app.route("/list/")
+def emptylist():
+    return redirect("/list/all")
+
+def listquery(query):
+    cursor = get_db().execute(query)
+    return [x[0] for x in cursor.fetchall()]
+
+@app.route("/list/<letter>")
+def listing(letter=None):
+    items = []
+    if letter.lower() == "all":
+        items = listquery("select distinct key from entries")
+    elif letter.lower() in "abcdefghijklmnopqrstuvwxyz0123456789":
+        items = listquery(
+        "select distinct key from entries where key glob '[{}{}]*'".format(letter.upper(), letter.lower())
+        )
+    elif letter.lower() == "numbers":
+        items = listquery("select distinct key from entries where key glob '[0-9]*'")
+    elif letter.lower() == "other":
+        items = listquery("select distinct key from entries where key glob '[^A-Za-z0-9]*'")
         
+    return render_template("list.html", items=items, letter=letter)
+
+
+# Login and logout functions
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    error = None
+    if request.method == "POST":
+        if request.form['password'] != app.config['PASSWORD']:
+            error = "Invalid password"
+        else:
+            session["logged_in"] = True
+            flash("You were logged in.")
+            return redirect("/whatis/test")
+    return render_template("login.html", error=error)
+
+@app.route("/logout")
+def logout():
+    session.pop("logged_in", None)
+    flash("You were logged out.")
+    return redirect(url_for("login"))
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
