@@ -5,14 +5,14 @@
 {% endblock %}
 
 {% block body %}
-  <ul class="definitions">
+  <ol class="definitions">
   {% for entry in entries %}
     <li>
       <span class="definition">{{entry.definition}}</span> 
       <span class="definer">({{entry.definer}} at {{entry.timestamp}})</span>
     </li>
   {% else %}
-    <li><strong>No definitions.</strong></li>
+    <li class="error"><strong>No definitions.</strong></li>
   {% endfor %}
-  </ul>
+  </ol>
 {% endblock %}

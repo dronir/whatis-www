@@ -4,17 +4,38 @@ h1 {
 }
 
 span.definition {
-    color: red;
+    font-size: larger;
 }
 
 span.definer {
     font-size: small;
 }
 
-li {
+ul li {
     list-style: none;
+    margin-bottom: 1ex;
+}
+
+ol li.error {
+    list-style: none;
+}
+
+ol li {
+    margin-bottom: 1ex;
 }
 
 body {
     margin-left: 5cm;
+    width: 50%;
+}
+
+div.flash {
+    background-color: #ffd0d0;
+    font-family: sans-serif;
+    font-size: larger;
+    padding: 0.5ex;
+}
+
+a {
+    text-decoration: none;
 }
