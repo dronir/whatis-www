@@ -78,6 +78,8 @@ def listquery(query):
 
 @app.route("/list/<letter>")
 def listing(letter=None):
+    if not session.get("logged_in"):
+        return redirect(url_for("login"))
     items = []
     if letter.lower() == "all":
         items = listquery("select distinct key from entries")
@@ -104,7 +106,7 @@ def login():
         else:
             session["logged_in"] = True
             flash("You were logged in.")
-            return redirect("/whatis/test")
+            return redirect("/list/all")
     return render_template("login.html", error=error)
 
 @app.route("/logout")
