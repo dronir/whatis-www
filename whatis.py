@@ -17,7 +17,7 @@ def connect_db():
     return sqlite3.connect(app.config['DATABASE'])
 
 def get_db():
-    """Return the handle to the database, connecting if necessary."""
+    """Return the database handle, connecting to it if necessary."""
     db = getattr(g, '_database', None)
     if db is None:
         db = g._database = connect_db()
@@ -83,9 +83,9 @@ def listing(letter=None):
         items = listquery("select distinct key from entries")
     elif letter.lower() in "abcdefghijklmnopqrstuvwxyz0123456789":
         items = listquery(
-        "select distinct key from entries where key glob '[{}{}]*'".format(letter.upper(), letter.lower())
-        )
-    elif letter.lower() == "numbers":
+        "select distinct key from entries where key glob '[{}{}]*'".format(letter.upper(), 
+        letter.lower()))
+    elif letter.lower() == "0-9":
         items = listquery("select distinct key from entries where key glob '[0-9]*'")
     elif letter.lower() == "other":
         items = listquery("select distinct key from entries where key glob '[^A-Za-z0-9]*'")

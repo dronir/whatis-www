@@ -39,3 +39,11 @@ div.flash {
 a {
     text-decoration: none;
 }
+
+div.metanav {
+    padding-top: 1ex;
+}
+
+div.metanav a {
+    color: black;
+}

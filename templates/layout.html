@@ -11,11 +11,19 @@
     <div class="flash">{{ message }}</div>
   {% endfor %}
   
+  <div class="metanav">
+    {% block nav %}
+      {% for x in 'ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ' %}
+      <a href="/list/{{x}}">{{x}}</a>
+      {% endfor %}
+      <a href="/list/0-9">0–9</a>
+      <a href="/list/other">other</a>
+    {% endblock %}
+  </div>
+  
   {% block header %}
   <h1>Whatis web interface</h2>
   {% endblock %}
-  
-  <div class="metanav"></div>
   
   <div class="content">
     {% block body %}{% endblock %}
