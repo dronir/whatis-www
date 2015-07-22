@@ -89,7 +89,7 @@ def listing(letter=None):
         items = listquery("select distinct key from entries where key glob '[0-9]*'")
     elif letter.lower() == "other":
         items = listquery("select distinct key from entries where key glob '[^A-Za-z0-9]*'")
-        
+    items.sort(key=unicode.lower)
     return render_template("list.html", items=items, letter=letter)
 
 
