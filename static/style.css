@@ -1,7 +1,7 @@
 
 body {
-    margin-left: 5cm;
-    width: 50%;
+    margin-left: 10%;
+    background: white;
 }
 
 h1 {font-family: sans-serif;}
@@ -24,7 +24,33 @@ div.flash {
     padding: 0.5ex;
 }
 
-a {text-decoration: none;}
+a {
+    text-decoration: none;
+    font-family: sans-serif;
+}
 
 div.metanav {padding-top: 1ex;}
-div.metanav a {color: black;}
+div.metanav a {
+    color: black; 
+    margin-right: 0.5ex;
+}
+
+div.msg_error {
+    background-color: #ffd0d0;
+    font-family: sans-serif;
+    font-size: larger;
+    padding: 0.5ex;    
+}
+div.msg_ok {
+    background-color: #d0ffd0;
+    font-family: sans-serif;
+    font-size: larger;
+    padding: 0.5ex;    
+}
+
+a#red {
+    color: #c04040;
+}
+
+dt {margin-top: 1em;}
+

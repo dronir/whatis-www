@@ -3,6 +3,11 @@
   {% if error %}<p class="error"><strong>Error: {{error}} {% endif %}
   <form action="{{ url_for('login') }}" method="post">
     <dl>
+      <dt>User type:</dt>
+      <dd><select name="usertype">
+        <option value="user">User</option>
+        <option value="admin">Admin</option>
+      </select></dd>
       <dt>Password:</dt>
       <dd><input type="password" name="password"/></dd>
       <dd><input type="submit" value="Login"/></dd>

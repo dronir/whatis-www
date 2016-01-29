@@ -45,6 +45,7 @@ def format_entries(fetch):
             "timestamp" : row[4]}
         for row in fetch]
 
+# WHATIS
 @app.route("/whatis/<thing>")
 def show_definition(thing=None):
     if not session.get("logged_in"):
@@ -54,18 +55,28 @@ def show_definition(thing=None):
     return render_template("definitions.html", entries=entries, thing=thing)
 
 
+# DEFINE
 @app.route("/define/<thing>/<what>")
 def define(thing=None, what=None):
     if not session.get("logged_in"):
         return redirect(url_for("login"))
+    if not session.get("admin_rights"):
+        return render_template("definition_result.html", 
+                               message="You're not allowed to define!",
+                               msg_class="msg_error")
     if not thing and what:
         return ""
     get_db().execute("insert into entries (key, definition, definer) values (?, ?, ?)",
         [thing, what, "dronir"])
     get_db().commit()
-    flash("Defined {} as '{}'.".format(thing, what))
-    return ""
+    return render_template("definition_result.html", 
+                           message="Definition added.",
+                           msg_class="msg_ok")
 
+
+@app.route("/")
+def root():
+    return redirect("/list/all")
 
 @app.route("/list/")
 def emptylist():
@@ -84,8 +95,8 @@ def listing(letter=None):
         items = listquery("select distinct key from entries")
     elif letter.lower() in "abcdefghijklmnopqrstuvwxyz0123456789":
         items = listquery(
-        "select distinct key from entries where key glob '[{}{}]*'".format(letter.upper(), 
-        letter.lower()))
+                "select distinct key from entries where key glob '[{}{}]*'".format(
+                letter.upper(), letter.lower()))
     elif letter.lower() == "0-9":
         items = listquery("select distinct key from entries where key glob '[0-9]*'")
     elif letter.lower() == "other":
@@ -99,17 +110,29 @@ def listing(letter=None):
 @app.route("/login", methods=["GET", "POST"])
 def login():
     error = None
+    if request.method == "GET" and session.get("logged_in"):
+        return redirect("/list/all")
     if request.method == "POST":
-        if request.form['password'] != app.config['PASSWORD']:
-            error = "Invalid password"
-        else:
-            session["logged_in"] = True
+        if request.form['usertype'] == "user":
+            if request.form['password'] != app.config['PASSWORD']:
+                error = "Invalid password"
+            else:
+                session["logged_in"] = True
             return redirect("/list/all")
+        elif request.form['usertype'] == "admin":
+            if request.form['password'] != app.config['ADMIN_PASSWORD']:
+                error = "Invalid password"
+            else:
+                session["logged_in"] = True
+                session["admin_rights"] = True
+            return redirect("/list/all")
+            
     return render_template("login.html", error=error)
 
 @app.route("/logout")
 def logout():
     session.pop("logged_in", None)
+    session.pop("admin_rights", None)
     return redirect(url_for("login"))
 
 if __name__ == "__main__":

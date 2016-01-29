@@ -13,11 +13,13 @@
   
   <div class="metanav">
     {% block nav %}
+      <a href="/list/all">all</a>
       {% for x in 'ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ' %}
       <a href="/list/{{x}}">{{x}}</a>
       {% endfor %}
       <a href="/list/0-9">0–9</a>
       <a href="/list/other">other</a>
+      <a href="/logout" id="red">logout</a>
     {% endblock %}
   </div>
   
