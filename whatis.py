@@ -25,9 +25,8 @@ def get_db():
 
 def init_db():
     """Initialize an empty database (handle with care!)."""
-    with closing(connect_db()) as db:
-        with app.open_resource('schema.sql', mode='r') as f:
-            db.cursor().executescript(f.read())
+    with closing(connect_db()) as db, app.open_resource('schema.sql', mode='r') as f:
+        db.cursor().executescript(f.read())
         db.commit()
 
 @app.teardown_request
