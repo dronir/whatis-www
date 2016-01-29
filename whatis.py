@@ -61,17 +61,15 @@ def define(thing=None, what=None):
     if not session.get("logged_in"):
         return redirect(url_for("login"))
     if not session.get("admin_rights"):
-        return render_template("definition_result.html", 
-                               message="You're not allowed to define!",
-                               msg_class="msg_error")
+        flash("You're not allowed to define.")
+        return redirect("/whatis/{}".format(thing))
     if not thing and what:
         return ""
     get_db().execute("insert into entries (key, definition, definer) values (?, ?, ?)",
         [thing, what, "dronir"])
     get_db().commit()
-    return render_template("definition_result.html", 
-                           message="Definition added.",
-                           msg_class="msg_ok")
+    flash("Definition added.")
+    return redirect("/whatis/{}".format(thing))
 
 
 @app.route("/")
@@ -111,6 +109,7 @@ def listing(letter=None):
 def login():
     error = None
     if request.method == "GET" and session.get("logged_in"):
+        flash("Already logged in.")
         return redirect("/list/all")
     if request.method == "POST":
         if request.form['usertype'] == "user":
