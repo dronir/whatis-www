@@ -1,33 +1,21 @@
 
-h1 {
-    font-family: sans-serif;
-}
-
-span.definition {
-    font-size: larger;
-}
-
-span.definer {
-    font-size: small;
-}
-
-ul li {
-    list-style: none;
-    margin-bottom: 1ex;
-}
-
-ol li.error {
-    list-style: none;
-}
-
-ol li {
-    margin-bottom: 1ex;
-}
-
 body {
     margin-left: 5cm;
     width: 50%;
 }
+
+h1 {font-family: sans-serif;}
+
+span.definition {font-size: larger;}
+span.definer {font-size: small;}
+
+ul li {
+    list-style: none; 
+    margin-bottom: 1ex;
+}
+
+ol li.error {list-style: none;}
+ol li {margin-bottom: 1ex;}
 
 div.flash {
     background-color: #ffd0d0;
@@ -36,14 +24,7 @@ div.flash {
     padding: 0.5ex;
 }
 
-a {
-    text-decoration: none;
-}
+a {text-decoration: none;}
 
-div.metanav {
-    padding-top: 1ex;
-}
-
-div.metanav a {
-    color: black;
-}
+div.metanav {padding-top: 1ex;}
+div.metanav a {color: black;}
